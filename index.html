@@ -4,41 +4,39 @@
 <title>Closing SNAPMANNER</title>
 
 <style>
-
 body{
-font-family:Arial;
-background:#f4f4f4;
-padding:30px;
+    font-family:Arial;
+    background:#f4f4f4;
+    padding:30px;
 }
 
 .box{
-background:white;
-padding:25px;
-max-width:700px;
-margin:auto;
-border-radius:10px;
+    background:white;
+    padding:25px;
+    max-width:700px;
+    margin:auto;
+    border-radius:10px;
 }
 
 input{
-width:100%;
-padding:8px;
-margin:5px 0 15px 0;
+    width:100%;
+    padding:8px;
+    margin:5px 0 15px 0;
 }
 
 textarea{
-width:100%;
-height:220px;
-margin-top:20px;
+    width:100%;
+    height:220px;
+    margin-top:20px;
 }
 
 button{
-padding:10px 20px;
-background:black;
-color:white;
-border:none;
-cursor:pointer;
+    padding:10px 20px;
+    background:black;
+    color:white;
+    border:none;
+    cursor:pointer;
 }
-
 </style>
 
 </head>
@@ -88,7 +86,7 @@ cursor:pointer;
 <label>Cash Voucher Poster</label>
 <input type="number" id="cash_poster" onkeyup="hitung()">
 
-<label>Cash Voucher Koran</label>
+<label>Cash Voucher Koran Berwarna</label>
 <input type="number" id="cash_koran" onkeyup="hitung()">
 
 <hr>
@@ -100,6 +98,9 @@ cursor:pointer;
 
 <label>Contoh Poster</label>
 <input type="number" id="contoh" onkeyup="hitung()">
+
+<label>Contoh Koran Berwarna</label>
+<input type="number" id="contoh_koran" onkeyup="hitung()">
 
 <label>Error Print</label>
 <input type="number" id="error" onkeyup="hitung()">
@@ -127,74 +128,67 @@ cursor:pointer;
 </div>
 
 <script>
-
 function hitung(){
+    let open = parseInt(document.getElementById("open").value)||0;
+    let close = parseInt(document.getElementById("close").value)||0;
 
-let open = parseInt(document.getElementById("open").value)||0;
-let close = parseInt(document.getElementById("close").value)||0;
+    let trx_qris = parseInt(document.getElementById("trx_qris").value)||0;
+    let omset_qris = parseInt(document.getElementById("omset_qris").value)||0;
 
-let trx_qris = parseInt(document.getElementById("trx_qris").value)||0;
+    let cashPoster = parseInt(document.getElementById("cash_poster").value)||0;
+    let cashKoran = parseInt(document.getElementById("cash_koran").value)||0;
 
-let omset_qris = parseInt(document.getElementById("omset_qris").value)||0;
+    let kol = parseInt(document.getElementById("kol").value)||0;
+    let contoh = parseInt(document.getElementById("contoh").value)||0;
+    let contohKoran = parseInt(document.getElementById("contoh_koran").value)||0;
+    let error = parseInt(document.getElementById("error").value)||0;
 
-let cashPoster = parseInt(document.getElementById("cash_poster").value)||0;
-let cashKoran = parseInt(document.getElementById("cash_koran").value)||0;
+    let totalPrint = close - open;
 
-let kol = parseInt(document.getElementById("kol").value)||0;
-let contoh = parseInt(document.getElementById("contoh").value)||0;
-let error = parseInt(document.getElementById("error").value)||0;
+    // Free print mengurangi OMSET CASH
+    let realPoster = cashPoster - (kol + contoh);
+    let realKoran = cashKoran - (kol + contohKoran);
 
-let totalPrint = close-open;
+    if(realPoster < 0) realPoster = 0;
+    if(realKoran < 0) realKoran = 0;
 
-let omsetCash =
-(cashPoster*50400)+
-(cashKoran*45400);
+    let omsetCash = (realPoster * 50000) + (realKoran * 45000);
 
-let totalVoucher =
-cashPoster+
-cashKoran+
-(kol*2)+
-contoh;
+    // Total voucher = hanya cash voucher
+    let totalVoucher = cashPoster + cashKoran;
 
-let waste =
-(kol*2)+
-contoh+
-error;
+    // Waste = semua free print + error
+    let waste = kol*2 + contoh + contohKoran + error;
 
-let totalSystem =
-omset_qris+
-omsetCash;
+    // Total system
+    let totalSystem = omset_qris + omsetCash;
 
-document.getElementById("total_print").value=totalPrint;
-document.getElementById("omset_cash").value=omsetCash;
-document.getElementById("total_system").value=totalSystem;
-document.getElementById("total_voucher").value=totalVoucher;
-document.getElementById("total_waste").value=waste;
-
+    document.getElementById("total_print").value = totalPrint;
+    document.getElementById("omset_cash").value = omsetCash;
+    document.getElementById("total_system").value = totalSystem;
+    document.getElementById("total_voucher").value = totalVoucher;
+    document.getElementById("total_waste").value = waste;
 }
 
 function buat(){
+    let outlet = document.getElementById("outlet").value;
+    let tanggal = document.getElementById("tanggal").value;
+    let petugas = document.getElementById("petugas").value;
 
-let outlet=document.getElementById("outlet").value;
-let tanggal=document.getElementById("tanggal").value;
-let petugas=document.getElementById("petugas").value;
+    let open = document.getElementById("open").value;
+    let close = document.getElementById("close").value;
+    let total_print = document.getElementById("total_print").value;
 
-let open=document.getElementById("open").value;
-let close=document.getElementById("close").value;
-let total_print=document.getElementById("total_print").value;
+    let trx_qris = document.getElementById("trx_qris").value;
+    let voucher = document.getElementById("total_voucher").value;
 
-let trx_qris=document.getElementById("trx_qris").value;
+    let omset_qris = document.getElementById("omset_qris").value;
+    let omset_cash = document.getElementById("omset_cash").value;
+    let total_system = document.getElementById("total_system").value;
 
-let voucher=document.getElementById("total_voucher").value;
+    let waste = document.getElementById("total_waste").value;
 
-let omset_qris=document.getElementById("omset_qris").value;
-let omset_cash=document.getElementById("omset_cash").value;
-let total_system=document.getElementById("total_system").value;
-
-let waste=document.getElementById("total_waste").value;
-
-let text=
-
+    let text = 
 `Nama Outlet : ${outlet}
 Tanggal : ${tanggal}
 Nama Petugas : ${petugas}
@@ -215,10 +209,8 @@ TOTAL SYSTEM : ${total_system}
 waste : ${waste}
 `;
 
-document.getElementById("hasil").value=text;
-
+    document.getElementById("hasil").value = text;
 }
-
 </script>
 
 </body>
