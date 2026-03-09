@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Closing SNAPMANNER</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+padding:30px;
+}
+
+.box{
+background:white;
+padding:25px;
+max-width:700px;
+margin:auto;
+border-radius:10px;
+}
+
+input{
+width:100%;
+padding:8px;
+margin:5px 0 15px 0;
+}
+
+textarea{
+width:100%;
+height:220px;
+margin-top:20px;
+}
+
+button{
+padding:10px 20px;
+background:black;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Form Closing SNAPMANNER</h2>
+
+<label>Nama Outlet</label>
+<input id="outlet" value="SNAPMANNER BANDUNG HOOK">
+
+<label>Tanggal</label>
+<input id="tanggal">
+
+<label>Nama Petugas</label>
+<input id="petugas">
+
+<hr>
+
+<h3>Print Usage</h3>
+
+<label>Opening</label>
+<input type="number" id="open" onkeyup="hitung()">
+
+<label>Closing</label>
+<input type="number" id="close" onkeyup="hitung()">
+
+<label>Total Print</label>
+<input id="total_print" readonly>
+
+<hr>
+
+<h3>Transaksi</h3>
+
+<label>Jumlah Transaksi QRIS</label>
+<input type="number" id="trx_qris" onkeyup="hitung()">
+
+<label>Omset QRIS (dari photobooth)</label>
+<input type="number" id="omset_qris" onkeyup="hitung()">
+
+<hr>
+
+<h3>Cash Voucher</h3>
+
+<label>Cash Voucher Poster</label>
+<input type="number" id="cash_poster" onkeyup="hitung()">
+
+<label>Cash Voucher Koran</label>
+<input type="number" id="cash_koran" onkeyup="hitung()">
+
+<hr>
+
+<h3>Free Print</h3>
+
+<label>KOL</label>
+<input type="number" id="kol" onkeyup="hitung()">
+
+<label>Contoh Poster</label>
+<input type="number" id="contoh" onkeyup="hitung()">
+
+<label>Error Print</label>
+<input type="number" id="error" onkeyup="hitung()">
+
+<hr>
+
+<label>Omset Cash</label>
+<input id="omset_cash" readonly>
+
+<label>Total System</label>
+<input id="total_system" readonly>
+
+<hr>
+
+<label>Total Voucher</label>
+<input id="total_voucher" readonly>
+
+<label>Total Waste</label>
+<input id="total_waste" readonly>
+
+<button onclick="buat()">Generate Laporan</button>
+
+<textarea id="hasil"></textarea>
+
+</div>
+
+<script>
+
+function hitung(){
+
+let open = parseInt(document.getElementById("open").value)||0;
+let close = parseInt(document.getElementById("close").value)||0;
+
+let trx_qris = parseInt(document.getElementById("trx_qris").value)||0;
+
+let omset_qris = parseInt(document.getElementById("omset_qris").value)||0;
+
+let cashPoster = parseInt(document.getElementById("cash_poster").value)||0;
+let cashKoran = parseInt(document.getElementById("cash_koran").value)||0;
+
+let kol = parseInt(document.getElementById("kol").value)||0;
+let contoh = parseInt(document.getElementById("contoh").value)||0;
+let error = parseInt(document.getElementById("error").value)||0;
+
+let totalPrint = close-open;
+
+let omsetCash =
+(cashPoster*50400)+
+(cashKoran*45400);
+
+let totalVoucher =
+cashPoster+
+cashKoran+
+(kol*2)+
+contoh;
+
+let waste =
+(kol*2)+
+contoh+
+error;
+
+let totalSystem =
+omset_qris+
+omsetCash;
+
+document.getElementById("total_print").value=totalPrint;
+document.getElementById("omset_cash").value=omsetCash;
+document.getElementById("total_system").value=totalSystem;
+document.getElementById("total_voucher").value=totalVoucher;
+document.getElementById("total_waste").value=waste;
+
+}
+
+function buat(){
+
+let outlet=document.getElementById("outlet").value;
+let tanggal=document.getElementById("tanggal").value;
+let petugas=document.getElementById("petugas").value;
+
+let open=document.getElementById("open").value;
+let close=document.getElementById("close").value;
+let total_print=document.getElementById("total_print").value;
+
+let trx_qris=document.getElementById("trx_qris").value;
+
+let voucher=document.getElementById("total_voucher").value;
+
+let omset_qris=document.getElementById("omset_qris").value;
+let omset_cash=document.getElementById("omset_cash").value;
+let total_system=document.getElementById("total_system").value;
+
+let waste=document.getElementById("total_waste").value;
+
+let text=
+
+`Nama Outlet : ${outlet}
+Tanggal : ${tanggal}
+Nama Petugas : ${petugas}
+
+PRINT USAGE OPENING : ${open}
+PRINT USAGE CLOSING: ${close}
+TOTAL PRINT : ${total_print}
+
+Jumlah transaksi qris : ${trx_qris}
+Jumlah Seluruh Voucher : ${voucher}
+
+Extra print : Payment + Voucher - Photos capture
+
+Omset qris : ${omset_qris}
+omset cash : ${omset_cash}
+TOTAL SYSTEM : ${total_system}
+
+waste : ${waste}
+`;
+
+document.getElementById("hasil").value=text;
+
+}
+
+</script>
+
+</body>
+</html>
